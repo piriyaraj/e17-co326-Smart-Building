@@ -37,7 +37,7 @@
         "type": "mqtt out",
         "z": "41287b22cc71b05d",
         "name": "",
-        "topic": "326project/smartbuilding/safety/test/test",
+        "topic": "326project/smartbuilding/hvac/floor0/room0/sensor/temp",
         "qos": "",
         "retain": "",
         "respTopic": "",
@@ -46,7 +46,7 @@
         "correl": "",
         "expiry": "",
         "broker": "9faa1e76cfab210b",
-        "x": 600,
+        "x": 650,
         "y": 80,
         "wires": []
     },
@@ -74,7 +74,7 @@
         "type": "mqtt in",
         "z": "41287b22cc71b05d",
         "name": "",
-        "topic": "326project/smartbuilding/safety/test/test",
+        "topic": "326project/smartbuilding/hvac/floor0/room0/sensor/temp",
         "qos": "2",
         "datatype": "auto-detect",
         "broker": "9faa1e76cfab210b",
@@ -82,7 +82,7 @@
         "rap": true,
         "rh": 0,
         "inputs": 0,
-        "x": 170,
+        "x": 220,
         "y": 160,
         "wires": [
             [
@@ -95,17 +95,18 @@
         "type": "function",
         "z": "41287b22cc71b05d",
         "name": "SmokeDetect_Function",
-        "func": "msg.collection ='326_hvac_sensor_temp/floor0/room0'\nmsg.payload={\n    \n    \"time\": Date.now(),\n    \"value\": msg.payload\n}\nreturn msg;",
+        "func": "msg.collection ='326_hvac_sensor_temp'\nmsg.payload={\n    \n    \"time\": Date.now(),\n    \"value\": msg.payload\n}\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 450,
+        "x": 570,
         "y": 160,
         "wires": [
             [
-                "ac80492756990a72"
+                "ac80492756990a72",
+                "7f9b83d85af42bf7"
             ]
         ]
     },
@@ -120,8 +121,106 @@
         "upsert": false,
         "multi": false,
         "operation": "store",
-        "x": 680,
+        "x": 820,
         "y": 160,
+        "wires": []
+    },
+    {
+        "id": "7f9b83d85af42bf7",
+        "type": "debug",
+        "z": "41287b22cc71b05d",
+        "name": "web interface test",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 810,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "77816a932c2936fd",
+        "type": "mongodb in",
+        "z": "41287b22cc71b05d",
+        "mongodb": "de13983547e18743",
+        "name": "",
+        "collection": "326_hvac_sensor_temp",
+        "operation": "find",
+        "x": 350,
+        "y": 220,
+        "wires": [
+            [
+                "3c5512943e209f3f"
+            ]
+        ]
+    },
+    {
+        "id": "571ea8306b9fd074",
+        "type": "inject",
+        "z": "41287b22cc71b05d",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 100,
+        "y": 220,
+        "wires": [
+            [
+                "77816a932c2936fd"
+            ]
+        ]
+    },
+    {
+        "id": "3c5512943e209f3f",
+        "type": "debug",
+        "z": "41287b22cc71b05d",
+        "name": "debug 24",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 620,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "49135ed81e0af5fe",
+        "type": "comment",
+        "z": "41287b22cc71b05d",
+        "name": "sensor data value",
+        "info": "",
+        "x": 90,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "aa56a94a9f6ae92a",
+        "type": "comment",
+        "z": "41287b22cc71b05d",
+        "name": "sensor data value",
+        "info": "",
+        "x": 90,
+        "y": 300,
         "wires": []
     },
     {
