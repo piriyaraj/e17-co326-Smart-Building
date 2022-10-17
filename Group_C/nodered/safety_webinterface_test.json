@@ -37,9 +37,9 @@
         "type": "mqtt out",
         "z": "41287b22cc71b05d",
         "name": "",
-        "topic": "326project/smartbuilding/hvac/floor0/room0/sensor/temp",
-        "qos": "",
-        "retain": "",
+        "topic": "326project/smartbuilding/hvac/floor0/room0/sensor/humid",
+        "qos": "1",
+        "retain": "true",
         "respTopic": "",
         "contentType": "",
         "userProps": "",
@@ -55,7 +55,7 @@
         "type": "function",
         "z": "41287b22cc71b05d",
         "name": "function 80",
-        "func": "msg.payload=msg.payload%20\nreturn msg;",
+        "func": "msg.payload=msg.payload%20+20\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -74,16 +74,16 @@
         "type": "mqtt in",
         "z": "41287b22cc71b05d",
         "name": "",
-        "topic": "326project/smartbuilding/hvac/floor0/room0/sensor/temp",
-        "qos": "2",
+        "topic": "326project/smartbuilding/hvac/floor0/room0/sensor/humid",
+        "qos": "1",
         "datatype": "auto-detect",
         "broker": "9faa1e76cfab210b",
         "nl": false,
         "rap": true,
         "rh": 0,
         "inputs": 0,
-        "x": 220,
-        "y": 160,
+        "x": 230,
+        "y": 140,
         "wires": [
             [
                 "f920bc39d787c643"
@@ -95,14 +95,14 @@
         "type": "function",
         "z": "41287b22cc71b05d",
         "name": "SmokeDetect_Function",
-        "func": "msg.collection ='326_hvac_sensor_temp'\nmsg.payload={\n    \n    \"time\": Date.now(),\n    \"value\": msg.payload\n}\nreturn msg;",
+        "func": "msg.collection ='326_hvac_sensor_humid'\nmsg.payload={\n    \n    \"time\": Date.now(),\n    \"value\": msg.payload\n}\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
         "x": 570,
-        "y": 160,
+        "y": 140,
         "wires": [
             [
                 "ac80492756990a72",
@@ -122,7 +122,7 @@
         "multi": false,
         "operation": "store",
         "x": 820,
-        "y": 160,
+        "y": 120,
         "wires": []
     },
     {
@@ -139,7 +139,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 810,
-        "y": 200,
+        "y": 160,
         "wires": []
     },
     {
@@ -148,10 +148,10 @@
         "z": "41287b22cc71b05d",
         "mongodb": "de13983547e18743",
         "name": "",
-        "collection": "326_hvac_sensor_temp",
+        "collection": "326_hvac_sensor_humid",
         "operation": "find",
-        "x": 350,
-        "y": 220,
+        "x": 360,
+        "y": 200,
         "wires": [
             [
                 "3c5512943e209f3f"
@@ -180,7 +180,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 100,
-        "y": 220,
+        "y": 200,
         "wires": [
             [
                 "77816a932c2936fd"
@@ -199,28 +199,313 @@
         "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 620,
-        "y": 220,
+        "x": 600,
+        "y": 200,
         "wires": []
     },
     {
-        "id": "49135ed81e0af5fe",
+        "id": "d88ab17cb32150f5",
         "type": "comment",
         "z": "41287b22cc71b05d",
-        "name": "sensor data value",
+        "name": "Publish sensor data database",
         "info": "",
-        "x": 90,
+        "x": 140,
         "y": 40,
         "wires": []
     },
     {
-        "id": "aa56a94a9f6ae92a",
+        "id": "6d3de727df7c490d",
+        "type": "inject",
+        "z": "41287b22cc71b05d",
+        "name": "tempDataPushToDatabase",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 150,
+        "y": 320,
+        "wires": [
+            [
+                "e5431b0d4c91fb66"
+            ]
+        ]
+    },
+    {
+        "id": "511cfe60d7feccc6",
+        "type": "mqtt out",
+        "z": "41287b22cc71b05d",
+        "name": "",
+        "topic": "326project/smartbuilding/safety/floor0/room0/control/fire_alarm",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "9faa1e76cfab210b",
+        "x": 670,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "e5431b0d4c91fb66",
+        "type": "function",
+        "z": "41287b22cc71b05d",
+        "name": "function 247",
+        "func": "if (msg.payload % 2==0){\n    msg.payload == true\n}else{\n    msg.payload==false\n}\nmsg.payload=msg.payload%2\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 350,
+        "y": 320,
+        "wires": [
+            [
+                "511cfe60d7feccc6",
+                "4009b4cef53ef41f"
+            ]
+        ]
+    },
+    {
+        "id": "36803353fe7dcbc3",
+        "type": "mqtt in",
+        "z": "41287b22cc71b05d",
+        "name": "",
+        "topic": "326project/smartbuilding/safety/floor0/room0/control/fire_alarm",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "9faa1e76cfab210b",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 240,
+        "y": 380,
+        "wires": [
+            [
+                "3bea8b8b06c11daa"
+            ]
+        ]
+    },
+    {
+        "id": "3bea8b8b06c11daa",
+        "type": "function",
+        "z": "41287b22cc71b05d",
+        "name": "SmokeDetect_Function",
+        "func": "msg.collection ='326_fire_alarm'\nmsg.payload={\n    \n    \"time\": Date.now(),\n    \"value\": msg.payload\n}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 570,
+        "y": 380,
+        "wires": [
+            [
+                "b54f9d2d4383f908"
+            ]
+        ]
+    },
+    {
+        "id": "b54f9d2d4383f908",
+        "type": "mongodb out",
+        "z": "41287b22cc71b05d",
+        "mongodb": "de13983547e18743",
+        "name": "",
+        "collection": "",
+        "payonly": false,
+        "upsert": false,
+        "multi": false,
+        "operation": "store",
+        "x": 820,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "4009b4cef53ef41f",
+        "type": "debug",
+        "z": "41287b22cc71b05d",
+        "name": "web interface test",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 810,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "66e72f6610fd0e06",
+        "type": "mongodb in",
+        "z": "41287b22cc71b05d",
+        "mongodb": "de13983547e18743",
+        "name": "",
+        "collection": "326_fire_alarm",
+        "operation": "find",
+        "x": 330,
+        "y": 440,
+        "wires": [
+            [
+                "59019f35fe34ad93"
+            ]
+        ]
+    },
+    {
+        "id": "54292a2f5ea00375",
+        "type": "inject",
+        "z": "41287b22cc71b05d",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 100,
+        "y": 440,
+        "wires": [
+            [
+                "66e72f6610fd0e06"
+            ]
+        ]
+    },
+    {
+        "id": "59019f35fe34ad93",
+        "type": "debug",
+        "z": "41287b22cc71b05d",
+        "name": "debug 26",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 600,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "8224eeaacccad1be",
         "type": "comment",
         "z": "41287b22cc71b05d",
-        "name": "sensor data value",
+        "name": "Publish True/False data database",
         "info": "",
-        "x": 90,
-        "y": 300,
+        "x": 150,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "ee15d1094ee4e75a",
+        "type": "comment",
+        "z": "41287b22cc71b05d",
+        "name": "Clear database",
+        "info": "",
+        "x": 100,
+        "y": 560,
+        "wires": []
+    },
+    {
+        "id": "44707bc7c33ec33f",
+        "type": "inject",
+        "z": "41287b22cc71b05d",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 80,
+        "y": 600,
+        "wires": [
+            [
+                "a045bf0e8709edd8"
+            ]
+        ]
+    },
+    {
+        "id": "a045bf0e8709edd8",
+        "type": "mongodb in",
+        "z": "41287b22cc71b05d",
+        "mongodb": "de13983547e18743",
+        "name": "",
+        "collection": "326_fire_alarm",
+        "operation": "find",
+        "x": 370,
+        "y": 600,
+        "wires": [
+            [
+                "b06e01429d27a83c"
+            ]
+        ]
+    },
+    {
+        "id": "b06e01429d27a83c",
+        "type": "function",
+        "z": "41287b22cc71b05d",
+        "name": "function 248",
+        "func": "msg.collection = \"326_fire_alarm\"\nasync function sendSingleObj(payload){\n    for (let i = 0; i < payload.length;i++){\n        msg.payload = payload[i]\n        node.send(msg)\n    }\n}\nsendSingleObj(msg.payload)\nreturn;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 590,
+        "y": 640,
+        "wires": [
+            [
+                "b9d02c44cd633393"
+            ]
+        ]
+    },
+    {
+        "id": "b9d02c44cd633393",
+        "type": "mongodb out",
+        "z": "41287b22cc71b05d",
+        "mongodb": "de13983547e18743",
+        "name": "",
+        "collection": "",
+        "payonly": false,
+        "upsert": false,
+        "multi": false,
+        "operation": "delete",
+        "x": 780,
+        "y": 600,
         "wires": []
     },
     {
